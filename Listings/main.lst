@@ -1,0 +1,92 @@
+C51 COMPILER V9.54   MAIN                                                                  10/05/2016 21:21:24 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /* ************************************************************
+   2          UFRGS – Universidade Federal do Rio Grande do Sul
+   3          EE – Escola de Engenharia
+   4          DELET – Departamento de Engenharia Elétrica
+   5          Disciplina: Microprocessadores I
+   6          Código: ENG04475
+   7          Professor: Alexandre A. Junqueira
+   8          
+   9          Programa: programa C que ajusta a luminosidade dos LEDs do
+  10          Kit via teclado, utilizando PWM
+  11          
+  12          Autores: Bruno Zanchetta, Ícaro Dupont, Luciano Bongiorni.
+  13          Data: 2016/2
+  14          *************************************************************** */
+  15          
+  16          #include <define.h>
+  17          
+  18          void main(void)
+  19          {
+  20   1        PORTA_TECLAS = 0xFF;
+  21   1        PORTA_LEDS = 0x00;
+  22   1        while(1)
+  23   1        {
+  24   2          unsigned char show = 0, count, temp, LAST_KEY;
+  25   2          //pega a intensidade adequada show = x, para intensidade = x0%
+  26   2          if(!debouncing(LAST_KEY))
+  27   2          {
+  28   3            switch (PORTA_TECLAS) 
+  29   3            {
+  30   4              case (~0x01): show=0;   break;
+  31   4              case (~0x02): show=2;   break;
+  32   4              case (~0x04): show=4;   break;
+  33   4              case (~0x08): show=6;   break; 
+  34   4              case (~0x10): show=8;   break;    
+  35   4              case (~0x20): show=10;  break; 
+  36   4              case (~0x40):
+  37   4                if(show != 10)
+  38   4                  show++;
+  39   4                  break;
+  40   4              case (~0x80):
+  41   4                if(show != 0)
+  42   4                  show--;
+  43   4                  break;
+  44   4              
+  45   4              default: break;
+  46   4            }
+  47   3          }
+  48   2          
+  49   2          LAST_KEY = PORTA_TECLAS;
+  50   2      
+  51   2          //onde liga os leds por tempo definido de acordo
+  52   2          for (count = 1; count <= show; count++)
+  53   2          {
+  54   3            setLED(1);
+C51 COMPILER V9.54   MAIN                                                                  10/05/2016 21:21:24 PAGE 2   
+
+  55   3            for(temp=1;temp<=temp_ten;temp++)
+  56   3              delay1mseg();
+  57   3          }
+  58   2          while (count <=10) //faz a contagem que sobra no tempo restante
+  59   2          {
+  60   3            setLED(0);
+  61   3            for(temp=1;temp<=temp_ten;temp++)
+  62   3              delay1mseg();
+  63   3            count++;
+  64   3          }
+  65   2        }//fim do while(1)
+  66   1      }//fim do main
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    168    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

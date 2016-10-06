@@ -1,0 +1,5 @@
+".\Objects\delays.obj",
+".\Objects\switch_led.obj",
+".\Objects\main.obj" 
+TO ".\Objects\lab3" 
+PRINT(".\Listings\lab3.m51") RAMSIZE(256) 
